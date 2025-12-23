@@ -8,12 +8,12 @@
     body {
       margin: 0; padding: 20px;
       background-color: #000; color: #fff;
-      font-family: 'Pretendard', sans-serif;
+      font-family: 'Pretendard', -apple-system, sans-serif;
       display: flex; flex-direction: column; align-items: center;
       min-height: 100vh;
-      padding-bottom: 120px;
+      padding-bottom: 120px; /* 푸터 공간 확보 */
     }
-    .logo { position: absolute; top: 20px; left: 20px; font-size: 20px; font-weight: 800; opacity: 0.8; }
+    .logo { position: absolute; top: 20px; left: 20px; font-size: 20px; font-weight: 800; opacity: 0.6; }
     .container { margin-top: 80px; width: 100%; max-width: 500px; text-align: center; flex: 1; }
     
     .reward-card {
@@ -26,22 +26,28 @@
     .editable:focus { background: #f5f5f5; }
 
     h2 { margin-top: 0; font-size: 24px; font-weight: 800; }
-    .content { font-size: 17px; line-height: 1.6; white-space: pre-wrap; min-height: 40px; color: #333; }
+    .content { font-size: 17px; line-height: 1.6; white-space: pre-wrap; color: #333; }
     
     /* ⭐ 네이버 스타일 심플 푸터 ⭐ */
-    .footer {
+    .footer-area {
       margin-top: 60px;
-      padding-top: 20px;
-      border-top: 1px solid #222; /* 얇은 구분선 */
       width: 100%;
-      max-width: 400px;
-      font-size: 12px; /* 아주 작게 */
-      color: #666; /* 흐릿한 회색 */
-      font-weight: 400;
+      max-width: 480px;
+    }
+    .footer-line {
+      border-top: 1px solid #333; /* 얇은 구분선 */
+      margin-bottom: 10px;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-between; /* 날짜는 왼쪽, 문구는 오른쪽 */
+      font-size: 11px;
+      color: #777;
       letter-spacing: 0.5px;
+      padding: 0 5px;
     }
 
-    /* 우하단 고정 버튼 */
+    /* 우하단 완전 고정 저장 버튼 */
     .save-btn {
       position: fixed;
       right: 20px;
@@ -70,27 +76,50 @@
       <div id="desc2" class="content editable" contenteditable="true">내용을 입력하세요.</div>
     </div>
 
-    <div class="footer">Made by SMD</div>
+    <div class="footer-area">
+      <div class="footer-line"></div>
+      <div class="footer-content">
+        <div id="current-time">0000. 00. 00. 00:00:00</div>
+        <div>Made by SMD</div>
+      </div>
+    </div>
   </div>
 
   <button class="save-btn" onclick="saveData()">💾 저장하기</button>
 
   <script>
+    // 실시간 시계 기능
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.getFullYear() + '. ' + 
+        String(now.getMonth() + 1).padStart(2, '0') + '. ' + 
+        String(now.getDate()).padStart(2, '0') + '. ' + 
+        String(now.getHours()).padStart(2, '0') + ':' + 
+        String(now.getMinutes()).padStart(2, '0') + ':' + 
+        String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('current-time').innerText = timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // 저장 데이터 불러오기
     window.onload = function() {
       const ids = ['title1', 'desc1', 'title2', 'desc2'];
       ids.forEach(id => {
         const savedValue = localStorage.getItem(id);
         if (savedValue) document.getElementById(id).innerText = savedValue;
       });
+      updateClock();
     };
 
+    // 데이터 저장하기
     function saveData() {
       const ids = ['title1', 'desc1', 'title2', 'desc2'];
       ids.forEach(id => {
         const value = document.getElementById(id).innerText;
         localStorage.setItem(id, value);
       });
-      alert('저장되었습니다.');
+      alert('변경사항이 저장되었습니다.');
     }
   </script>
 
