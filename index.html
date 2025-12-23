@@ -3,60 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light">
   <title>SMD - 보상 관리</title>
   <style>
-    /* 전체 배경 및 레이아웃 */
+    /* 기본 초기화 */
     html, body {
       margin: 0; padding: 0;
       height: 100%; overflow: hidden;
-      background-color: #000; color: #fff;
+      background-color: #000 !important; /* 배경은 무조건 검정 */
+      color: #fff;
       font-family: 'Pretendard', -apple-system, sans-serif;
     }
     body {
       display: flex;
       flex-direction: column;
-      justify-content: center; /* 세로 중앙 정렬 */
+      justify-content: center;
       align-items: center;
       padding: 0 20px;
     }
 
-    /* 좌측 상단 SMD */
     .logo { position: absolute; top: 20px; left: 20px; font-size: 22px; font-weight: 800; opacity: 0.7; }
     
     .container { 
       width: 100%; 
-      max-width: 500px; /* 처음처럼 너비를 다시 키움 */
+      max-width: 500px;
       display: flex;
       flex-direction: column;
-      gap: 20px; /* 카드 사이 적당한 간격 */
+      gap: 20px;
     }
     
-    /* 보상 카드 (처음처럼 큼직하고 둥글게) */
+    /* ⭐ 다크모드에서도 무조건 하얀색으로 보이게 강제 설정 ⭐ */
     .reward-card {
-      background-color: #fff; color: #000;
-      padding: 35px 25px; /* 내부 여백을 늘려 크기 키움 */
-      border-radius: 40px; /* 처음처럼 더 둥글게 */
+      background-color: #ffffff !important; /* 하얀색 강제 */
+      color: #000000 !important; /* 글자 검은색 강제 */
+      padding: 35px 25px;
+      border-radius: 40px;
       text-align: center;
       box-sizing: border-box;
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
     }
     
-    .editable { outline: none; padding: 5px; border-radius: 10px; transition: 0.2s; }
-    .editable:focus { background: #f0f0f0; }
+    .editable { outline: none; padding: 5px; border-radius: 10px; }
+    .editable:focus { background: #f0f0f0 !important; }
 
-    h2 { margin: 0 0 15px 0; font-size: 26px; font-weight: 800; }
-    .content { font-size: 18px; line-height: 1.6; white-space: pre-wrap; color: #111; font-weight: 500; }
+    h2 { margin: 0 0 15px 0; font-size: 26px; font-weight: 800; color: #000 !important; }
+    .content { font-size: 18px; line-height: 1.6; white-space: pre-wrap; color: #111 !important; font-weight: 500; }
     
-    /* 하단 푸터 영역 */
+    /* 푸터 영역 */
     .footer-area {
-      margin-top: 35px; /* 카드와 적당한 거리 유지 */
+      margin-top: 35px;
       width: 100%;
       max-width: 480px;
     }
-    .footer-line {
-      border-top: 1px solid #333;
-      margin-bottom: 10px;
-    }
+    .footer-line { border-top: 1px solid #333; margin-bottom: 10px; }
     .footer-content {
       display: flex;
       justify-content: space-between;
@@ -66,7 +66,7 @@
     }
     .footer-content b { font-weight: 900; color: #aaa; }
 
-    /* 우하단 저장 버튼 */
+    /* 저장 버튼 */
     .save-btn {
       position: fixed;
       right: 20px;
@@ -74,10 +74,8 @@
       background: #4f46e5; color: white; border: none;
       padding: 14px 22px; border-radius: 50px;
       font-size: 14px; font-weight: bold; cursor: pointer;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.6);
       z-index: 9999;
     }
-    .save-btn:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
@@ -87,12 +85,12 @@
   <div class="container">
     <div class="reward-card">
       <h2 id="title1" class="editable" contenteditable="true">RC카 볼링 보상 🎳</h2>
-      <div id="desc1" class="content editable" contenteditable="true">여기를 클릭해서 내용을 입력하세요.</div>
+      <div id="desc1" class="content editable" contenteditable="true">내용을 입력하세요.</div>
     </div>
 
     <div class="reward-card">
       <h2 id="title2" class="editable" contenteditable="true">RC카 축구 보상 ⚽</h2>
-      <div id="desc2" class="content editable" contenteditable="true">여기를 클릭해서 내용을 입력하세요.</div>
+      <div id="desc2" class="content editable" contenteditable="true">내용을 입력하세요.</div>
     </div>
 
     <div class="footer-area">
@@ -107,7 +105,6 @@
   <button class="save-btn" onclick="saveData()">💾 저장하기</button>
 
   <script>
-    // 시간 업데이트
     function updateClock() {
       const now = new Date();
       const timeStr = now.getFullYear() + '. ' + 
@@ -121,7 +118,6 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // 데이터 불러오기
     window.onload = function() {
       const ids = ['title1', 'desc1', 'title2', 'desc2'];
       ids.forEach(id => {
@@ -131,7 +127,6 @@
       updateClock();
     };
 
-    // 데이터 저장
     function saveData() {
       const ids = ['title1', 'desc1', 'title2', 'desc2'];
       ids.forEach(id => {
