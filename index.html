@@ -2,69 +2,76 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SMD - 보상 관리</title>
   <style>
-    body {
-      margin: 0; padding: 20px;
+    /* 스크롤이 생기지 않도록 고정 */
+    html, body {
+      margin: 0; padding: 0;
+      height: 100%; overflow: hidden;
       background-color: #000; color: #fff;
       font-family: 'Pretendard', -apple-system, sans-serif;
-      display: flex; flex-direction: column; align-items: center;
-      min-height: 100vh;
-      position: relative; /* 푸터 고정을 위해 필요 */
-      padding-bottom: 100px; /* 푸터가 내용을 가리지 않게 여백 확보 */
     }
-    .logo { position: absolute; top: 20px; left: 20px; font-size: 20px; font-weight: 800; opacity: 0.6; }
-    .container { margin-top: 80px; width: 100%; max-width: 500px; text-align: center; flex: 1; }
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* 세로 중앙 정렬 */
+      align-items: center;
+      padding: 0 20px;
+    }
+    .logo { position: absolute; top: 15px; left: 20px; font-size: 18px; font-weight: 800; opacity: 0.6; }
+    
+    .container { 
+      width: 100%; 
+      max-width: 400px; 
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* 카드 사이 간격 축소 */
+    }
     
     .reward-card {
       background-color: #fff; color: #000;
-      margin-bottom: 25px; padding: 35px;
-      border-radius: 35px; text-align: center;
+      padding: 25px 20px;
+      border-radius: 30px; 
+      text-align: center;
+      box-sizing: border-box;
     }
     
-    .editable { outline: none; transition: 0.2s; padding: 5px; border-radius: 10px; }
+    .editable { outline: none; padding: 3px; border-radius: 8px; }
     .editable:focus { background: #f5f5f5; }
 
-    h2 { margin-top: 0; font-size: 24px; font-weight: 800; }
-    .content { font-size: 17px; line-height: 1.6; white-space: pre-wrap; color: #333; }
+    h2 { margin: 0 0 10px 0; font-size: 20px; font-weight: 800; }
+    .content { font-size: 15px; line-height: 1.5; white-space: pre-wrap; color: #333; }
     
-    /* ⭐ 화면 맨 아래로 붙인 푸터 ⭐ */
+    /* ⭐ 카드 바로 아래 붙는 심플 푸터 ⭐ */
     .footer-area {
-      position: absolute;
-      bottom: 30px; /* 맨 아래에서 30px 띄움 */
+      margin-top: 25px;
       width: 100%;
-      max-width: 480px;
+      max-width: 380px;
     }
     .footer-line {
       border-top: 1px solid #333;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .footer-content {
       display: flex;
       justify-content: space-between;
       font-size: 11px;
-      color: #777;
-      padding: 0 10px;
+      color: #666;
     }
-    /* SMD 볼드체 설정 */
-    .footer-content b {
-      font-weight: 900;
-      color: #aaa; /* 살짝 더 밝게 해서 강조 */
-    }
+    .footer-content b { font-weight: 900; color: #888; }
 
-    /* 우하단 저장 버튼 (푸터보다 위쪽에 배치) */
+    /* 저장 버튼: 우하단 고정 */
     .save-btn {
       position: fixed;
-      right: 20px;
-      bottom: 80px; /* 푸터와 안 겹치게 위로 올림 */
+      right: 15px;
+      bottom: 15px;
       background: #4f46e5; color: white; border: none;
-      padding: 12px 20px; border-radius: 50px;
-      font-size: 14px; font-weight: bold; cursor: pointer;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      padding: 10px 18px; border-radius: 40px;
+      font-size: 13px; font-weight: bold; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
       z-index: 9999;
     }
-    .save-btn:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
@@ -91,7 +98,7 @@
     </div>
   </div>
 
-  <button class="save-btn" onclick="saveData()">💾 저장하기</button>
+  <button class="save-btn" onclick="saveData()">💾 저장</button>
 
   <script>
     function updateClock() {
@@ -122,7 +129,7 @@
         const value = document.getElementById(id).innerText;
         localStorage.setItem(id, value);
       });
-      alert('성공적으로 저장되었습니다.');
+      alert('저장되었습니다!');
     }
   </script>
 
