@@ -3,68 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SMD - 보상 안내</title>
+  <title>SMD - 보상 관리</title>
   <style>
-    /* 전체 배경 설정 */
     body {
-      margin: 0;
-      padding: 20px;
-      background-color: #000; /* 검은색 배경 */
-      color: #fff; /* 기본 글자색 흰색 */
-      font-family: 'Pretendard', sans-serif; /* 둥글둥글한 느낌의 폰트 */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0; padding: 20px;
+      background-color: #000; color: #fff;
+      font-family: 'Pretendard', sans-serif;
+      display: flex; flex-direction: column; align-items: center;
       min-height: 100vh;
     }
-
-    /* 좌측 상단 SMD 로고 */
-    .logo {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 2px;
-    }
-
-    /* 메인 컨테이너 */
-    .container {
-      margin-top: 80px;
-      width: 100%;
-      max-width: 500px;
-      text-align: center;
-    }
-
-    /* 보상 카드 스타일 (둥글둥글한 느낌) */
+    .logo { position: absolute; top: 20px; left: 20px; font-size: 24px; font-weight: 800; }
+    .container { margin-top: 80px; width: 100%; max-width: 500px; text-align: center; }
+    
     .reward-card {
-      background-color: #fff; /* 하얀색 배경 */
-      color: #000; /* 검은색 글자 */
-      margin-bottom: 30px;
-      padding: 30px;
-      border-radius: 40px; /* 아주 둥글게 */
-      box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+      background-color: #fff; color: #000;
+      margin-bottom: 30px; padding: 30px;
+      border-radius: 40px; position: relative;
     }
+    
+    /* 수정 가능한 영역 표시 */
+    .editable { padding: 5px; border-radius: 10px; outline: none; transition: 0.3s; }
+    .editable:focus { background: #eef2ff; box-shadow: 0 0 0 3px #4f46e5; }
 
-    .reward-card h2 {
-      margin-top: 0;
-      font-size: 28px;
-      font-weight: 700;
+    h2 { margin-top: 0; font-size: 28px; font-weight: 800; }
+    .content { font-size: 18px; line-height: 1.6; white-space: pre-wrap; }
+    
+    /* 저장 버튼 */
+    .save-btn {
+      background: #4f46e5; color: white; border: none;
+      padding: 15px 40px; border-radius: 50px;
+      font-size: 18px; font-weight: bold; cursor: pointer;
+      margin-top: 20px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
     }
-
-    /* 보상 내용 (수정 가능한 부분) */
-    .content {
-      font-size: 18px;
-      line-height: 1.6;
-      font-weight: 500;
-      word-break: keep-all;
-    }
-
-    /* 반응형 조절 */
-    @media (max-width: 600px) {
-      .reward-card { border-radius: 30px; padding: 20px; }
-      .reward-card h2 { font-size: 22px; }
-    }
+    .save-btn:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
@@ -72,24 +43,39 @@
   <div class="logo">SMD</div>
 
   <div class="container">
-    
     <div class="reward-card">
-      <h2>RC카 볼링 보상 🎳</h2>
-      <div class="content">
-        스트라이크 성공 시: 편의점 상품권 5,000원<br>
-        7핀 이상 성공 시: 맛있는 간식 꾸러미
-      </div>
+      <h2 id="title1" class="editable" contenteditable="true">RC카 볼링 보상 🎳</h2>
+      <div id="desc1" class="content editable" contenteditable="true">내용을 입력하세요.</div>
     </div>
 
     <div class="reward-card">
-      <h2>RC카 축구 보상 ⚽</h2>
-      <div class="content">
-        승리 팀 전원: 문화상품권 각 1만원<br>
-        MVP 선정: 특별 보너스 포인트 지급
-      </div>
+      <h2 id="title2" class="editable" contenteditable="true">RC카 축구 보상 ⚽</h2>
+      <div id="desc2" class="content editable" contenteditable="true">내용을 입력하세요.</div>
     </div>
 
+    <button class="save-btn" onclick="saveData()">변경사항 저장하기</button>
   </div>
+
+  <script>
+    // 페이지 로드 시 저장된 데이터 불러오기
+    window.onload = function() {
+      const ids = ['title1', 'desc1', 'title2', 'desc2'];
+      ids.forEach(id => {
+        const savedValue = localStorage.getItem(id);
+        if (savedValue) document.getElementById(id).innerText = savedValue;
+      });
+    };
+
+    // 데이터 저장 함수
+    function saveData() {
+      const ids = ['title1', 'desc1', 'title2', 'desc2'];
+      ids.forEach(id => {
+        const value = document.getElementById(id).innerText;
+        localStorage.setItem(id, value);
+      });
+      alert('저장되었습니다! 이제 새로고침해도 유지됩니다.');
+    }
+  </script>
 
 </body>
 </html>
