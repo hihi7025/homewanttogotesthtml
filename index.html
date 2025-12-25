@@ -1,141 +1,65 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="color-scheme" content="light only">
-  <meta name="supported-color-schemes" content="light">
-  <title>SMD</title>
-  <style>
-    /* 기본 초기화 */
-    html, body {
-      margin: 0; padding: 0;
-      height: 100%; overflow: hidden;
-      background-color: #000 !important; /* 배경은 무조건 검정 */
-      color: #fff;
-      font-family: 'Pretendard', -apple-system, sans-serif;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 0 20px;
-    }
-
-    .logo { position: absolute; top: 20px; left: 20px; font-size: 22px; font-weight: 800; opacity: 0.7; }
-    
-    .container { 
-      width: 100%; 
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    
-    /* ⭐ 다크모드에서도 무조건 하얀색으로 보이게 강제 설정 ⭐ */
-    .reward-card {
-      background-color: #ffffff !important; /* 하얀색 강제 */
-      color: #000000 !important; /* 글자 검은색 강제 */
-      padding: 35px 25px;
-      border-radius: 40px;
-      text-align: center;
-      box-sizing: border-box;
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-    }
-    
-    .editable { outline: none; padding: 5px; border-radius: 10px; }
-    .editable:focus { background: #f0f0f0 !important; }
-
-    h2 { margin: 0 0 15px 0; font-size: 26px; font-weight: 800; color: #000 !important; }
-    .content { font-size: 18px; line-height: 1.6; white-space: pre-wrap; color: #111 !important; font-weight: 500; }
-    
-    /* 푸터 영역 */
-    .footer-area {
-      margin-top: 35px;
-      width: 100%;
-      max-width: 480px;
-    }
-    .footer-line { border-top: 1px solid #333; margin-bottom: 10px; }
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: #777;
-      padding: 0 5px;
-    }
-    .footer-content b { font-weight: 900; color: #aaa; }
-
-    /* 저장 버튼 */
-    .save-btn {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      background: #4f46e5; color: white; border: none;
-      padding: 14px 22px; border-radius: 50px;
-      font-size: 14px; font-weight: bold; cursor: pointer;
-      z-index: 9999;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMD </title>
+    <style>
+        body {
+            background: #000; margin: 0; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-family: sans-serif; color: #fff; overflow: hidden;
+        }
+        #status { font-size: 18px; margin-bottom: 20px; color: #666; }
+        #btn {
+            background: #ff0000; color: #fff; border: none;
+            padding: 25px 50px; border-radius: 10px; font-size: 24px; font-weight: bold;
+            cursor: pointer; transition: 0.2s; z-index: 10;
+        }
+        #btn:active { transform: scale(0.9); }
+        
+        /* 폭발 효과 */
+        #flash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; opacity: 0; pointer-events: none; z-index: 20;
+        }
+        .msg {
+            display: none; position: absolute; text-align: center; z-index: 30;
+        }
+        h1 { font-size: 40px; color: #ffcc00; margin: 0; }
+        p { color: #888; margin-top: 15px; }
+    </style>
 </head>
 <body>
 
-  <div class="logo">SMD</div>
+    <div id="status">시스템 종료 대기 중...</div>
+    <button id="btn" onclick="explode()">절대 누르지 마시오</button>
 
-  <div class="container">
-    <div class="reward-card">
-      <h2 id="title1" class="editable" contenteditable="true">TEST</h2>
-      <div id="desc1" class="content editable" contenteditable="true">내용을 입력하세요.</div>
+    <div id="flash"></div>
+
+    <div id="result" class="msg">
+        <h1>Fatal Error!</h1>
+        <p>error</p>
     </div>
 
-    <div class="reward-card">
-      <h2 id="title2" class="editable" contenteditable="true">TEST</h2>
-      <div id="desc2" class="content editable" contenteditable="true">내용을 입력하세요.</div>
-    </div>
+    <script>
+        function explode() {
+            const btn = document.getElementById('btn');
+            const status = document.getElementById('status');
+            const flash = document.getElementById('flash');
+            const result = document.getElementById('result');
 
-    <div class="footer-area">
-      <div class="footer-line"></div>
-      <div class="footer-content">
-        <div id="current-time">0000. 00. 00. 00:00:00</div>
-        <div>Made by <b>SMD</b></div>
-      </div>
-    </div>
-  </div>
+            btn.style.display = 'none';
+            status.style.display = 'none';
 
-  <button class="save-btn" onclick="saveData()">💾로컬 저장하기</button>
-
-  <script>
-    function updateClock() {
-      const now = new Date();
-      const timeStr = now.getFullYear() + '. ' + 
-        String(now.getMonth() + 1).padStart(2, '0') + '. ' + 
-        String(now.getDate()).padStart(2, '0') + '. ' + 
-        String(now.getHours()).padStart(2, '0') + ':' + 
-        String(now.getMinutes()).padStart(2, '0') + ':' + 
-        String(now.getSeconds()).padStart(2, '0');
-      document.getElementById('current-time').innerText = timeStr;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    window.onload = function() {
-      const ids = ['title1', 'desc1', 'title2', 'desc2'];
-      ids.forEach(id => {
-        const savedValue = localStorage.getItem(id);
-        if (savedValue) document.getElementById(id).innerText = savedValue;
-      });
-      updateClock();
-    };
-
-    function saveData() {
-      const ids = ['title1', 'desc1', 'title2', 'desc2'];
-      ids.forEach(id => {
-        const value = document.getElementById(id).innerText;
-        localStorage.setItem(id, value);
-      });
-      alert('저장되었습니다!');
-    }
-  </script>
-
+            // 화면 번쩍이는 효과
+            flash.style.opacity = '1';
+            setTimeout(() => {
+                flash.style.transition = 'opacity 0.8s';
+                flash.style.opacity = '0';
+                result.style.display = 'block';
+            }, 100);
+        }
+    </script>
 </body>
 </html>
