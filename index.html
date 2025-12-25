@@ -1,65 +1,117 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMD </title>
-    <style>
-        body {
-            background: #000; margin: 0; height: 100vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-family: sans-serif; color: #fff; overflow: hidden;
-        }
-        #status { font-size: 18px; margin-bottom: 20px; color: #666; }
-        #btn {
-            background: #ff0000; color: #fff; border: none;
-            padding: 25px 50px; border-radius: 10px; font-size: 24px; font-weight: bold;
-            cursor: pointer; transition: 0.2s; z-index: 10;
-        }
-        #btn:active { transform: scale(0.9); }
-        
-        /* 폭발 효과 */
-        #flash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff; opacity: 0; pointer-events: none; z-index: 20;
-        }
-        .msg {
-            display: none; position: absolute; text-align: center; z-index: 30;
-        }
-        h1 { font-size: 40px; color: #ffcc00; margin: 0; }
-        p { color: #888; margin-top: 15px; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Loading...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: #fff;
+      color: #000;
+      width: 320px;
+      padding: 30px 25px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .progress-text {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e5e5;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6a5cff, #9a8cff);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 20px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <div class="title">페이지를 불러오는 중입니다</div>
+    <div class="desc">잠시만 기다려주세요...</div>
 
-    <div id="status">시스템 종료 대기 중...</div>
-    <button id="btn" onclick="explode()">절대 누르지 마시오</button>
+    <div class="progress-text" id="percent">0%</div>
 
-    <div id="flash"></div>
-
-    <div id="result" class="msg">
-        <h1>Error!</h1>
-        <p>에러</p>
+    <div class="progress-bar">
+      <div class="progress" id="bar"></div>
     </div>
+  </div>
 
-    <script>
-        function explode() {
-            const btn = document.getElementById('btn');
-            const status = document.getElementById('status');
-            const flash = document.getElementById('flash');
-            const result = document.getElementById('result');
+  <div class="footer">Made by SMD</div>
 
-            btn.style.display = 'none';
-            status.style.display = 'none';
+  <script>
+    let percent = 0;
+    const percentText = document.getElementById("percent");
+    const bar = document.getElementById("bar");
 
-            // 화면 번쩍이는 효과
-            flash.style.opacity = '1';
-            setTimeout(() => {
-                flash.style.transition = 'opacity 0.8s';
-                flash.style.opacity = '0';
-                result.style.display = 'block';
-            }, 100);
-        }
-    </script>
+    function updateProgress() {
+      if (percent < 90) {
+        percent += Math.random() * 4 + 1; // 빠름
+      } else if (percent < 95) {
+        percent += Math.random() * 0.4; // 느려짐
+      } else {
+        percent = 95; // 여기서 멈춤 (무한 로딩)
+      }
+
+      percent = Math.min(percent, 95);
+
+      percentText.textContent = Math.floor(percent) + "%";
+      bar.style.width = percent + "%";
+
+      setTimeout(updateProgress, percent < 90 ? 300 : 900);
+    }
+
+    updateProgress();
+  </script>
 </body>
 </html>
